@@ -21,6 +21,22 @@ const cartReducer = (state = [], action) => {
       case "DELETE_FROM_CART":
         return state.filter(item => item.code !== action.payload.code);
   
+
+        case "DECREASE_QTY_PRODUCT":
+          return state.map((item, idx) =>
+            idx === action.i && item.qty > 1
+              ? { ...item, qty: item.qty - 1 }
+              : item
+          );
+        
+        case "ADD_QTY_PRODUCT":
+          return state.map((item, idx) =>
+            idx === action.i
+              ? { ...item, qty: item.qty + 1 }
+              : item
+          );
+        
+
       default:
         return state;
     }

@@ -8,13 +8,11 @@ import { useSelector } from 'react-redux';
 
 function AppNavbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const cartProduct = useSelector(state => state.cartReducer); // ✅ useSelector at top level
-
+  const cartProduct = useSelector(state => state.cartReducer);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
-    console.log('Is logged in:', loggedInStatus);
     setIsLoggedIn(loggedInStatus);
   }, []);
 
@@ -26,10 +24,24 @@ function AppNavbar() {
 
   return (
     <>
-      <Navbar bg="warning" variant="light" expand="lg" style={{ zIndex: 1000 }}>
+      <Navbar 
+        bg="warning" 
+        variant="light" 
+        expand="lg" 
+        className="py-2 shadow-sm"
+        style={{ zIndex: 1000 }}
+      >
         <Container>
-          <Navbar.Brand onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            <img src={logo} alt="Logo" height="40" />
+          {/* Logo Container with fixed size */}
+          <Navbar.Brand 
+            onClick={() => navigate('/')} 
+            style={{ cursor: 'pointer', height: '50px', display: 'flex', alignItems: 'center' }}
+          >
+            <img 
+              src={logo} 
+              alt="Logo" 
+              style={{ height: '250%', width: 'auto', maxWidth: '120px', objectFit: 'contain' }} 
+            />
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -37,7 +49,7 @@ function AppNavbar() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto d-flex align-items-center">
               <Nav.Link onClick={() => navigate('/')}>
-                <img src={home} alt="Home" style={{ width: 30, height: 30 }} />
+                <img src={home} alt="Home" style={{ width: 25, height: 25 }} />
               </Nav.Link>
               <Nav.Link onClick={() => navigate('/about')}>About Us</Nav.Link>
               <Nav.Link onClick={() => navigate('/stationery')}>Stationery</Nav.Link>
@@ -47,7 +59,7 @@ function AppNavbar() {
 
             <Nav className="ms-auto d-flex align-items-center">
               <Nav.Link onClick={() => navigate('/cart')} className="d-flex align-items-center">
-                <img src={cart} alt="Cart" style={{ width: 30, height: 30 }} />
+                <img src={cart} alt="Cart" style={{ width: 25, height: 25 }} />
                 <Badge bg="secondary" className="ms-1">{cartProduct.length}</Badge>
               </Nav.Link>
 
@@ -64,9 +76,9 @@ function AppNavbar() {
         </Container>
       </Navbar>
 
-      {/* Add padding to push content below navbar on small screens */}
-      <div style={{ paddingTop: '0px' }}>
-        {/* Your page content starts here */}
+      {/* Push content below navbar */}
+      <div style={{ paddingTop: '00px' }}>
+        {/* Your page content goes here */}
       </div>
     </>
   );

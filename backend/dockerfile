@@ -1,0 +1,21 @@
+# Step 1: Use an official Node.js image
+FROM node:16
+
+# Step 2: Set the working directory
+WORKDIR /app
+
+# Step 3: Copy package.json and install dependencies
+COPY package.json .
+RUN npm install
+
+# Step 4: Copy the rest of the application files
+COPY . .
+
+# Step 5: Copy the .env file to the working directory
+COPY .env .env
+
+# Step 6: Expose the backend app port
+EXPOSE 5000
+
+# Step 7: Run the app
+CMD ["npm", "start"]

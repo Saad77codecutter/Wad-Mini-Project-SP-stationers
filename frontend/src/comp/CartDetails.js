@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { deleteFromCart } from "../redux/action/cartActions";
-import { decreaseQty, increaseQty } from "../redux/action/productActions";
+import { decreaseQty, increaseQty,addQty } from "../redux/action/productActions";
 
 export default function CartDetails() {
    const cartProduct = useSelector((state) => state.cartReducer);
@@ -44,17 +44,24 @@ export default function CartDetails() {
       fetchCustomerData();
    }, []);
 
-   const handleDecrease = (item) => {
+   const handleDecrease = (item, index) => {
       if (item.qty > 1) {
-         dispatch(decreaseQty(item.code));
+         dispatch(decreaseQty(item.qty, index));
       }
    };
-
-   const handleIncrease = (item) => {
-      dispatch(increaseQty(item.code));
+   
+   const handleIncrease = (item, index) => {
+      dispatch(addQty(item.qty, index));
    };
-
+   
    const handleCheckout = async () => {
+      const customerId = localStorage.getItem("customerId");
+      if (!customerId) {
+         alert("Please login before placing an order.");
+         navigate("/cls");
+         return;
+      }
+   
       const orderData = {
          products: cartProduct.map(item => ({
             product: item._id,
@@ -63,7 +70,7 @@ export default function CartDetails() {
          customer,
          total_price: total
       };
-
+   
       try {
          const res = await axios.post("http://localhost:5000/api/orders/", orderData);
          alert("Order placed successfully!");
@@ -73,6 +80,7 @@ export default function CartDetails() {
          alert("Failed to place order. Please try again.");
       }
    };
+   
 
    return (
       <center>
@@ -91,7 +99,7 @@ export default function CartDetails() {
                      </tr>
                   </thead>
                   <tbody>
-                     {cartProduct.map((item) => (
+                     {cartProduct.map((item,index) => (
                         <tr key={item.code}>
                            <td style={{ textAlign: "center" }}>
                               <Button
@@ -103,12 +111,12 @@ export default function CartDetails() {
                            <td style={{ textAlign: "center" }}>
                               <Button
                                  style={{ backgroundColor: "#F5D43E", borderColor: "#F5D43E", color: "black" }}
-                                 onClick={() => handleDecrease(item)}
+                                 onClick={() => handleDecrease(item,index)}
                               >-</Button>{" "}
                               {item.qty}{" "}
                               <Button
                                  style={{ backgroundColor: "#F5D43E", borderColor: "#F5D43E", color: "black" }}
-                                 onClick={() => handleIncrease(item)}
+                                 onClick={() => handleIncrease(item,index)}
                               >+</Button>
                            </td>
                            <td style={{ textAlign: "center" }}>
